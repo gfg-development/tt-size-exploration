@@ -38,7 +38,10 @@ module tt_um_size_exploration (
     end
 
     // module under exploration
-    mult mult (
+    fma fma (
+        .clk(clk),
+        .reset(reset),
+        .enable(ena),
         .ina(inputs[7 : 0]),
         .inb(inputs[7 : 0]),
         .out(result[15 : 0])
