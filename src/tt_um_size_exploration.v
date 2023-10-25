@@ -24,15 +24,15 @@ module tt_um_size_exploration (
     assign uio_out  = ui_in[7] ? result[23 : 16] : result[31 : 24];
 
     // handle inputs
-    reg [2 : 0] [31 : 0] inputs;
+    reg [32 * 3 - 1 : 0] inputs;
     integer i;
     always @(posedge clk) begin
         for (i = 0; i < 3; i++) begin
             // if reset, set counter to 0
             if (reset) begin
-                inputs[i] <= 0;
+                inputs                <= 0;
             end else begin
-                inputs[i] <= {inputs[i][30 : 0], ui_in[i]};
+                inputs[32 * i +: 32]  <= {inputs[32 * i +: 31], ui_in[i]};
             end
         end
     end
