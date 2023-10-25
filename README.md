@@ -2,6 +2,7 @@
 
 # Size exploration of Tiny Tapeout
 The aim of this repository is to compare the size of different components. 
+This project is not thought to be taped out. 
 
 ## What is Tiny Tapeout?
 
