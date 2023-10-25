@@ -38,10 +38,10 @@ module tt_um_size_exploration (
     end
 
     // module under exploration
-    adder adder (
+    mult mult (
         .ina(inputs[7 : 0]),
         .inb(inputs[7 : 0]),
-        .out(result[8 : 0])
+        .out(result[15 : 0])
     );
-    assign result[31 : 9] = 0;
+    assign result[31 : 16] = 0;
 endmodule
