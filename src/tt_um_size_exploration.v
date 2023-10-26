@@ -1,6 +1,9 @@
 `default_nettype none
 
-module tt_um_size_exploration (
+module tt_um_size_exploration #(
+    parameter INPUT_WIDTH = 6,
+    parameter COMPONENT = "ADDER"
+) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
@@ -38,13 +41,33 @@ module tt_um_size_exploration (
     end
 
     // module under exploration
-    fma fma (
-        .clk(clk),
-        .reset(reset),
-        .enable(ena),
-        .ina(inputs[7 : 0]),
-        .inb(inputs[7 : 0]),
-        .out(result[15 : 0])
-    );
-    assign result[31 : 16] = 0;
+    generate
+        if (COMPONENT == "FMA") begin
+            fma #(.WIDTH(INPUT_WIDTH)) fma (
+                .clk(clk),
+                .reset(reset),
+                .enable(ena),
+                .ina(inputs[INPUT_WIDTH - 1 : 0]),
+                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .out(result[2 * INPUT_WIDTH - 1 : 0])
+            );
+            assign result[31 : 2 * INPUT_WIDTH] = 0;
+        end else if (COMPONENT == "MULT") begin
+            mult #(.WIDTH(INPUT_WIDTH)) mult (
+                .ina(inputs[INPUT_WIDTH - 1 : 0]),
+                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .out(result[2 * INPUT_WIDTH - 1 : 0])
+            );
+            assign result[31 : 2 * INPUT_WIDTH] = 0;
+        end else if (COMPONENT == "ADDER") begin
+            adder #(.WIDTH(INPUT_WIDTH)) adder (
+                .ina(inputs[INPUT_WIDTH - 1 : 0]),
+                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .out(result[INPUT_WIDTH : 0])
+            );
+            assign result[31 : INPUT_WIDTH + 1] = 0;
+        end else begin
+            assign result = 0;
+        end
+    endgenerate    
 endmodule
