@@ -2,7 +2,7 @@
 
 module tt_um_size_exploration #(
     parameter INPUT_WIDTH = 6,
-    parameter COMPONENT = "FMA"
+    parameter COMPONENT = "ADDER"
 ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
@@ -28,6 +28,8 @@ module tt_um_size_exploration #(
 
     // handle inputs
     reg [32 * 3 - 1 : 0] inputs;
+    wire [31 : 0] input_a;
+    wire [31 : 0] input_b;
     integer i;
     always @(posedge clk) begin
         for (i = 0; i < 3; i++) begin
@@ -40,6 +42,9 @@ module tt_um_size_exploration #(
         end
     end
 
+    assign input_a  = inputs[31 : 0];
+    assign input_b  = inputs[63 : 32];
+
     // module under exploration
     generate
         if (COMPONENT == "FMA") begin
@@ -47,22 +52,22 @@ module tt_um_size_exploration #(
                 .clk(clk),
                 .reset(reset),
                 .enable(ena),
-                .ina(inputs[INPUT_WIDTH - 1 : 0]),
-                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .ina(input_a[INPUT_WIDTH - 1 : 0]),
+                .inb(input_b[INPUT_WIDTH - 1 : 0]),
                 .out(result[2 * INPUT_WIDTH - 1 : 0])
             );
             assign result[31 : 2 * INPUT_WIDTH] = 0;
         end else if (COMPONENT == "MULT") begin
             mult #(.WIDTH(INPUT_WIDTH)) mult (
-                .ina(inputs[INPUT_WIDTH - 1 : 0]),
-                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .ina(input_a[INPUT_WIDTH - 1 : 0]),
+                .inb(input_b[INPUT_WIDTH - 1 : 0]),
                 .out(result[2 * INPUT_WIDTH - 1 : 0])
             );
             assign result[31 : 2 * INPUT_WIDTH] = 0;
         end else if (COMPONENT == "ADDER") begin
             adder #(.WIDTH(INPUT_WIDTH)) adder (
-                .ina(inputs[INPUT_WIDTH - 1 : 0]),
-                .inb(inputs[INPUT_WIDTH - 1 : 0]),
+                .ina(input_a[INPUT_WIDTH - 1 : 0]),
+                .inb(input_b[INPUT_WIDTH - 1 : 0]),
                 .out(result[INPUT_WIDTH : 0])
             );
             assign result[31 : INPUT_WIDTH + 1] = 0;
