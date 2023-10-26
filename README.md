@@ -77,7 +77,7 @@ This project is not thought to be taped out.
 |Misc | [dlygate4sd3](https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd3) [conb](https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/conb) | 19|
 |Multiplexer | [mux2](https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/mux2) | 9|
 |Inverter | [inv](https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/inv) | 8|
-##### 449 total cells (excluding fill and tap cells)
+###### 449 total cells (excluding fill and tap cells)
 
 
 ## What is Tiny Tapeout?
