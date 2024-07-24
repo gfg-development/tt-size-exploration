@@ -9,6 +9,7 @@ project:
     - fma.v
     - mult.v   
     - adder.v
+    - mandelbrot.v
     - tt_um_size_exploration.v
   top_module:  "tt_um_size_exploration"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 

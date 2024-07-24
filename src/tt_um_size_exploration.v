@@ -2,7 +2,7 @@
 
 module tt_um_size_exploration #(
     parameter INPUT_WIDTH = 8,
-    parameter COMPONENT = "ADDER"
+    parameter COMPONENT = "MANDELBROT"
 ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
@@ -69,6 +69,16 @@ module tt_um_size_exploration #(
                 .ina(input_a[INPUT_WIDTH - 1 : 0]),
                 .inb(input_b[INPUT_WIDTH - 1 : 0]),
                 .out(result[INPUT_WIDTH : 0])
+            );
+            assign result[31 : INPUT_WIDTH + 1] = 0;
+        end else if (COMPONENT == "MANDELBROT") begin
+            mandelbrot #(.WIDTH(INPUT_WIDTH)) adder (
+                .in_cr(input_a[INPUT_WIDTH - 1 : 0]),
+                .in_ci(input_a[2 * INPUT_WIDTH - 1 : INPUT_WIDTH]),
+                .in_zr(input_b[INPUT_WIDTH - 1 : 0]),
+                .in_zi(input_b[2 * INPUT_WIDTH - 1 : INPUT_WIDTH]),
+                .out_zr(result[INPUT_WIDTH - 1 : 0]),
+                .out_zi(result[2 * INPUT_WIDTH - 1 : INPUT_WIDTH])
             );
             assign result[31 : INPUT_WIDTH + 1] = 0;
         end else begin
