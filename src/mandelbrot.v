@@ -28,7 +28,8 @@
  */
  `default_nettype none
 
-// assume that the format is 2.(WIDHT-2)
+// assume that the input format is 2.(WIDHT-2)
+// the results of the multiplication and additons have the format 3.(WIDTH-1)
 
 module mandelbrot #( parameter WIDTH = 8) (
     input  wire signed [WIDTH - 1 : 0]     in_cr,
@@ -36,16 +37,28 @@ module mandelbrot #( parameter WIDTH = 8) (
     input  wire signed [WIDTH - 1 : 0]     in_zr,
     input  wire signed [WIDTH - 1 : 0]     in_zi,
     output wire signed [WIDTH - 1 : 0]     out_zr,
-    output wire signed [WIDTH - 1 : 0]     out_zi
+    output wire signed [WIDTH - 1 : 0]     out_zi,
+    output wire                            size
 );
     wire signed [2 * WIDTH - 1 : 0] m1;
     wire signed [2 * WIDTH - 1 : 0] m2;
     wire signed [2 * WIDTH - 1 : 0] m3;
 
+    wire signed [WIDTH + 1 : 0]     t_zr;
+    wire signed [WIDTH + 1 : 0]     t_zi;
+
+    wire        [WIDTH + 1 : 0]     t_sum;
+
     assign m1       = in_zr * in_zr;
     assign m2       = in_zi * in_zi;
     assign m3       = in_zr * in_zi;
     
-    assign out_zr   = m1[2 * WIDTH - 4 : WIDTH - 2] - m2[2 * WIDTH - 4 : WIDTH - 2] + in_cr;
-    assign out_zi   = m3[2 * WIDTH - 4 : WIDTH - 2] + in_ci;
+    assign t_zr     = m1[2 * WIDTH - 3 : WIDTH - 3] - m2[2 * WIDTH - 3 : WIDTH - 3] + {{1{in_cr[WIDTH - 1]}}, in_cr, 1'b0};
+    assign t_zi     = m3[2 * WIDTH - 2 : WIDTH - 2] + {{1{in_ci[WIDTH - 1]}}, in_ci,  1'b0};
+
+    assign out_zr   = t_zr[WIDTH : 1];
+    assign out_zi   = t_zi[WIDTH : 1];
+
+    assign t_sum    = m1[2 * WIDTH - 3 : WIDTH - 3] + m2[2 * WIDTH - 3 : WIDTH - 3];
+    assign size     = (t_sum[WIDTH + 1 : WIDTH - 2] > 4) ? 1'b1 : 1'b0;
 endmodule
