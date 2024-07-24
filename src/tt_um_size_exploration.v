@@ -1,7 +1,7 @@
 `default_nettype none
 
 module tt_um_size_exploration #(
-    parameter INPUT_WIDTH = 8,
+    parameter INPUT_WIDTH = 10,
     parameter COMPONENT = "MANDELBROT"
 ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
