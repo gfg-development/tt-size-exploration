@@ -80,7 +80,7 @@ module tt_um_size_exploration #(
                 .out_zr(result[INPUT_WIDTH - 1 : 0]),
                 .out_zi(result[2 * INPUT_WIDTH - 1 : INPUT_WIDTH])
             );
-            assign result[31 : INPUT_WIDTH + 1] = 0;
+            assign result[31 : 2 * INPUT_WIDTH] = 0;
         end else begin
             assign result = 0;
         end
