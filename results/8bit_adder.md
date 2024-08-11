@@ -1,4 +1,4 @@
-# 6 bit adder
+# 8 bit adder
 ## Routing stats
 
 | Utilisation (%) | Wire length (um) |
