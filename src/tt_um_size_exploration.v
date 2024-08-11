@@ -1,8 +1,8 @@
 `default_nettype none
 
 module tt_um_size_exploration #(
-    parameter INPUT_WIDTH = 10,
-    parameter COMPONENT = "MANDELBROT"
+    parameter INPUT_WIDTH = 8,
+    parameter COMPONENT = "ADDER_RC"
 ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
@@ -66,6 +66,13 @@ module tt_um_size_exploration #(
             assign result[31 : 2 * INPUT_WIDTH] = 0;
         end else if (COMPONENT == "ADDER") begin
             adder #(.WIDTH(INPUT_WIDTH)) adder (
+                .ina(input_a[INPUT_WIDTH - 1 : 0]),
+                .inb(input_b[INPUT_WIDTH - 1 : 0]),
+                .out(result[INPUT_WIDTH : 0])
+            );
+            assign result[31 : INPUT_WIDTH + 1] = 0;
+        end else if (COMPONENT == "ADDER_RC") begin
+            adder_rc #(.WIDTH(INPUT_WIDTH)) adder (
                 .ina(input_a[INPUT_WIDTH - 1 : 0]),
                 .inb(input_b[INPUT_WIDTH - 1 : 0]),
                 .out(result[INPUT_WIDTH : 0])
